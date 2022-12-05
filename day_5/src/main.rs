@@ -9,8 +9,8 @@ use nom::IResult;
 
 fn main() -> anyhow::Result<()> {
 	let input = std::fs::read_to_string("day_5/input.txt")?;
-	println!("Day 1: {}", part_1(&input)?);
-	println!("Day 2: {}", part_2(&input)?);
+	println!("Part 1: {}", part_1(&input)?);
+	println!("Part 2: {}", part_2(&input)?);
 	Ok(())
 }
 
@@ -18,10 +18,12 @@ fn part_1(input: &str) -> anyhow::Result<String> {
 	let (_, Input { mut stacks, steps }) = parse_input(input).map_err(|err| anyhow!("{err:?}"))?;
 
 	for step in steps {
-		for _ in 0..step.count {
-			let v = stacks[step.source_idx].pop().unwrap();
-			stacks[step.destination_idx].push(v);
-		}
+		let (source_stack, destination_stack) =
+			get_2_mut_unchecked(&mut stacks, step.source_idx, step.destination_idx);
+
+		let source_stack_len = source_stack.len();
+		let removed_stack_iter = source_stack.drain((source_stack_len - step.count)..).rev();
+		destination_stack.extend(removed_stack_iter);
 	}
 
 	Ok(stacks
