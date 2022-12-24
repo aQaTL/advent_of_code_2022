@@ -1,0 +1,11 @@
+[dependencies]
+anyhow = '1.0'
+itertools = '0.10'
+nom = '7.0.0'
+regex = '1.4'
+rayon = "1.6.1"
+
+[package]
+edition = '2021'
+name = 'day_19'
+version = '0.1.0'
